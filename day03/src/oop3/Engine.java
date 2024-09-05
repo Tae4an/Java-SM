@@ -4,7 +4,6 @@ import java.util.Random;
 
 public class Engine{
     private int serial;
-    private int gear;
     private boolean engineOnOffStatus;
 
     Random random = new Random();
@@ -12,17 +11,9 @@ public class Engine{
     public Engine(){
         this.serial = random.nextInt(10000)+1;
         this.engineOnOffStatus = false;
-        this.gear = 0;
     }
 
 
-    public int getGear() {
-        return gear;
-    }
-
-    public void setGear(int gear) {
-        this.gear = gear;
-    }
 
 
     public boolean isEngineOnOffStatus() {
@@ -37,7 +28,6 @@ public class Engine{
     public String toString() {
         return "Engine{" +
                 "engineOnOffStatus=" + engineOnOffStatus +
-                ", gear=" + gear +
                 ", serial=" + serial +
                 '}';
     }

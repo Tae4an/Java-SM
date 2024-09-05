@@ -11,7 +11,7 @@ public class Main {
         String[] transmissionTypes = Car.getTransmissionTypes();
 
         Car[] myCars = new Car[3];
-        int carCount = 0;
+        int carCnt = 0;
 
         Driver driver = new Driver("홍길동", 43, 1);
         System.out.println(driver);
@@ -39,7 +39,7 @@ public class Main {
             }
             switch (menu) {
                 case 1 -> {
-                    if (carCount >= 3) {
+                    if (carCnt >= 3) {
                         System.out.println("더 이상 차량을 구매할 수 없습니다. 최대 3대까지만 소유 가능합니다.");
                         continue;
                     }
@@ -107,10 +107,9 @@ public class Main {
                         transmissionType = transmissionChoice;
                         System.out.println("선택한 변속기: " + transmissionTypes[transmissionChoice - 1]);
 
-                        // 새로운 Car 객체 생성 및 배열에 추가
                         Car newCar = new Car(selectedCar, selectedColor, transmissionType);
-                        myCars[carCount] = newCar;
-                        carCount++;
+                        myCars[carCnt] = newCar;
+                        carCnt++;
 
                         System.out.println("[최종 선택: " + selectedCar + " (" + selectedColor + ", " +
                                 transmissionTypes[transmissionType - 1] + ")]");
@@ -120,14 +119,13 @@ public class Main {
                 }
                 case 2 -> {
                     while (true) {
-                        if (carCount == 0) {
+                        if (carCnt == 0) {
                             System.out.println("[소유한 차량이 없습니다.]");
                             break;
                         } else {
                             System.out.println("[내 차량 목록:]");
                             System.out.println("--------------------------------");
-                            for (int i = 0; i < carCount; i++) {
-                                System.out.println(myCars[i]);
+                            for (int i = 0; i < carCnt; i++) {
                                 System.out.print((i + 1) + ". " + myCars[i].getName() + " ");
                             }
                             System.out.println("\n--------------------------------");
@@ -145,16 +143,16 @@ public class Main {
                                     int carIndex = scanner.nextInt();
                                     scanner.nextLine();
 
-                                    if (carIndex < 1 || carIndex > carCount) {
+                                    if (carIndex < 1 || carIndex > carCnt) {
                                         System.out.println("잘못된 번호입니다. 다시 입력해주세요.");
                                     } else {
                                         // 선택한 차량 제거
                                         System.out.println(myCars[carIndex - 1].getName() + " 차량이 제거되었습니다.");
-                                        for (int i = carIndex - 1; i < carCount - 1; i++) {
+                                        for (int i = carIndex - 1; i < carCnt - 1; i++) {
                                             myCars[i] = myCars[i + 1];
                                         }
-                                        myCars[carCount - 1] = null;
-                                        carCount--;
+                                        myCars[carCnt - 1] = null;
+                                        carCnt--;
                                     }
                                 } else if (choice == 2) {
                                     break;
@@ -173,9 +171,61 @@ public class Main {
                     System.out.println("[내 정보]");
                     System.out.printf(" 이름: %s   나이: %d세   %d종 운전면허 자격증\n\n", driver.getName(), driver.getAge(), driver.getLicense());
                 }
+                case 4 -> {
+                    if (carCnt == 0) {
+                        System.out.println("소유한 차량이 없습니다. 먼저 차량을 구매해주세요.");
+                        continue;
+                    }
+
+                    System.out.println("[내 차량 목록:]");
+                    for (int i = 0; i < carCnt; i++) {
+                        System.out.println((i + 1) + ". " + myCars[i].getName() + " (현재 연료: " + String.format("%.2f", myCars[i].getCurrFuel()) + "L)");
+                    }
+
+                    System.out.print("운전할 차량 번호를 선택하세요: ");
+                    int carChoice = scanner.nextInt();
+                    scanner.nextLine();
+
+                    if (carChoice < 1 || carChoice > carCnt) {
+                        System.out.println("잘못된 번호입니다.");
+                        continue;
+                    }
+
+                    Car selectedCar = myCars[carChoice - 1];
+
+                    boolean inDrivingMode = true;
+                    while (inDrivingMode) {
+                        System.out.println("\n[운전 메뉴]");
+                        System.out.println("1. 시동 걸기");
+                        System.out.println("2. 출발하기");
+                        System.out.println("3. 브레이크");
+                        System.out.println("4. 시동 끄기");
+                        System.out.println("5. 나가기");
+                        System.out.print("메뉴를 선택하세요: ");
+                        int drivingChoice = scanner.nextInt();
+                        scanner.nextLine();
+
+                        switch (drivingChoice) {
+                            case 1 -> selectedCar.startEngine();
+                            case 2 -> {
+                                System.out.print("이동할 거리를 입력하세요 (km): ");
+                                double distance = scanner.nextDouble();
+                                System.out.print("평균 속도를 입력하세요 (km/h): ");
+                                double speed = scanner.nextDouble();
+                                scanner.nextLine();
+                                selectedCar.drive(distance, speed);
+                            }
+                            case 3 -> selectedCar.brake();
+                            case 4 -> selectedCar.stopEngine();
+                            case 5 -> inDrivingMode = false;
+                            default -> System.out.println("잘못된 메뉴 번호입니다. 다시 선택해주세요.");
+                        }
+                    }
+
+                }
                 case 5 -> {
                     while (true) {
-                        if (carCount == 0) {
+                        if (carCnt == 0) {
                             System.out.println("소유한 차량이 없습니다. 먼저 차량을 구매해주세요.");
                             System.out.println("메인 메뉴로 돌아갑니다.");
                             break;
@@ -183,7 +233,7 @@ public class Main {
 
                         System.out.println("[내 차량 목록:]");
                         System.out.println("--------------------------------");
-                        for (int i = 0; i < carCount; i++) {
+                        for (int i = 0; i < carCnt; i++) {
                             System.out.println((i + 1) + ". " + myCars[i].getName() + " (현재 연료: " + String.format("%.2f", myCars[i].getCurrFuel()) + "L)");
                         }
                         System.out.println("--------------------------------");
@@ -200,7 +250,7 @@ public class Main {
                                 int carIndex = scanner.nextInt();
                                 scanner.nextLine();
 
-                                if (carIndex < 1 || carIndex > carCount) {
+                                if (carIndex < 1 || carIndex > carCnt) {
                                     System.out.println("잘못된 번호입니다. 다시 입력해주세요.");
                                     continue;
                                 }
