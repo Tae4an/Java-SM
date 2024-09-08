@@ -5,12 +5,9 @@ public abstract class Engine {
     private double displacement;
     private int horsePower;
 
-    public Engine() {
-        engineSerial++;
-    }
 
     protected Engine(double displacement, int horsePower) {
-        this();
+        engineSerial++;
         this.displacement = displacement;
         this.horsePower = horsePower;
     }
@@ -31,10 +28,6 @@ public abstract class Engine {
 
     @Override
     public String toString() {
-        return "Engine{" +
-                "engineSerial='" + engineSerial + '\'' +
-                ", displacement=" + displacement +
-                ", horsePower=" + horsePower +
-                '}';
+        return String.format("%.1fL %dHP (#%d)", displacement, horsePower, engineSerial);
     }
 }

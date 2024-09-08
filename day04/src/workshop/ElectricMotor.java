@@ -1,45 +1,34 @@
 package workshop;
 
 public class ElectricMotor extends Engine {
-    private double batteryCapacity; // kWh
-    private double maxRange; // km
+    private double efficiency; // 효율 (0.0 ~ 1.0)
 
-    public ElectricMotor(double power, double efficiency, double batteryCapacity, double maxRange) {
-        super("Electric", 0, (int)power, efficiency); // 전기 모터는 배기량이 없으므로 0
-        this.batteryCapacity = batteryCapacity;
-        this.maxRange = maxRange;
+    public ElectricMotor(double displacement, int horsePower, double efficiency) {
+        super(displacement, horsePower);
+        this.efficiency = efficiency;
     }
 
     @Override
     public void start() {
-        System.out.println("Electric motor starting silently.");
+        System.out.println("전기 모터가 조용히 시동됩니다.");
     }
 
     @Override
     public void stop() {
-        System.out.println("Electric motor stopping.");
+        System.out.println("전기 모터가 즉시 정지합니다.");
     }
 
     @Override
     public double calculateFuelConsumption(double distance, double speed) {
-        // 전기차의 경우 연료 소비량을 배터리 사용량으로 계산
-        // 간단한 계산을 위해 속도에 따른 효율 변화는 무시
-        return (distance / maxRange) * batteryCapacity;
-    }
-
-    public double getBatteryCapacity() {
-        return batteryCapacity;
-    }
-
-    public double getMaxRange() {
-        return maxRange;
+        // 전기차의 경우 연료 소비량 대신 전력 소비량을 계산 (kWh)
+        double timeHours = distance / speed;
+        double powerConsumption = getHorsePower() * 0.745 * timeHours; // 마력을 kW로 변환
+        return powerConsumption / efficiency;
     }
 
     @Override
     public String toString() {
-        return super.toString() + ", ElectricEngine{" +
-                "batteryCapacity=" + batteryCapacity +
-                ", maxRange=" + maxRange +
-                '}';
+        return String.format("ElectricMotor: %.1fL %dHP (효율: %.1f%%)",
+                getDisplacement(), getHorsePower(), efficiency * 100);
     }
 }
