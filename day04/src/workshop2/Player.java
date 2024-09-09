@@ -1,7 +1,5 @@
 package workshop2;
 
-import workshop2.terran.Terran;
-
 public class Player {
     private String name;
     private Tribe tribe;
@@ -20,16 +18,17 @@ public class Player {
     }
 
     public void createUnit(String unitType) {
-        if (tribe instanceof Terran) {
-            try {
-                Unit newUnit = ((Terran) tribe).createUnit(unitType);
-                tribe.addUnit(newUnit);
-                System.out.println(name + "님이 " + newUnit.getName() + "을(를) 생성했습니다.");
-            } catch (IllegalArgumentException e) {
-                System.out.println(e.getMessage());
-            }
-        } else {
-            System.out.println("해당 종족은 아직 유닛 생성 기능이 구현되지 않았습니다.");
+        // 유닛 생성 시도
+        try {
+            // 종족의 유닛 생성 메소드 호출 및 새 유닛 생성
+            Unit newUnit = tribe.createUnit(unitType);
+            // 생성된 유닛을 플레이어의 유닛 목록에 추가
+            tribe.addUnit(newUnit);
+            // 유닛 생성 성공 메시지 출력
+            System.out.println(name + "님이 " + newUnit.getName() + "을(를) 생성했습니다.");
+        } catch (IllegalArgumentException e) {
+            // 잘못된 유닛 타입 입력에 대한 예외 처리 및 에러 메시지 출력
+            System.out.println(e.getMessage());
         }
     }
 

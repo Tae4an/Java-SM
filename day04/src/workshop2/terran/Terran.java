@@ -11,21 +11,19 @@ public class Terran extends Tribe {
     }
 
     @Override
-    public Unit createBasicUnit() {
-        return new Marine();
+    public List<String> getAvailableUnits() {
+        return List.of("마린", "메딕");
     }
 
     @Override
-    public List<String> getAvailableUnits() {
-        return List.of("마린");
-    }
-
     public Unit createUnit(String unitType) {
         switch (unitType.toLowerCase()) {
             case "마린":
                 return new Marine();
+            case "메딕":
+                return new Medic();
             default:
-                throw new IllegalArgumentException("알 수 없는 유닛 타입: " + unitType);
+                throw new IllegalArgumentException("알 수 없는 테란 유닛 타입: " + unitType);
         }
     }
 }

@@ -11,14 +11,19 @@ public class Zerg extends Tribe {
     }
 
     @Override
-    public Unit createBasicUnit() {
-        // 저그의 기본 유닛 (예: 저글링)을 생성하는 코드
-        // 현재는 구현되지 않았으므로 null을 반환
-        return null;
+    public List<String> getAvailableUnits() {
+        return List.of("저글링", "히드라리스크");
     }
 
     @Override
-    public List<String> getAvailableUnits() {
-        return List.of(); // 아직 구현된 유닛이 없음
+    public Unit createUnit(String unitType) {
+        switch (unitType.toLowerCase()) {
+            case "저글링":
+                return new Zergling();
+            case "히드라리스크":
+                return new Hydralisk();
+            default:
+                throw new IllegalArgumentException("알 수 없는 저그 유닛 타입: " + unitType);
+        }
     }
 }

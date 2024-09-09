@@ -4,21 +4,25 @@ import workshop2.Tribe;
 import workshop2.Unit;
 
 import java.util.List;
-
 public class Protoss extends Tribe {
     public Protoss() {
         super("프로토스");
     }
 
     @Override
-    public Unit createBasicUnit() {
-        // 프로토스의 기본 유닛 (예: 질럿)을 생성하는 코드
-        // 현재는 구현되지 않았으므로 null을 반환
-        return null;
+    public List<String> getAvailableUnits() {
+        return List.of("질럿", "드라군");
     }
 
     @Override
-    public List<String> getAvailableUnits() {
-        return List.of(); // 아직 구현된 유닛이 없음
+    public Unit createUnit(String unitType) {
+        switch (unitType.toLowerCase()) {
+            case "질럿":
+                return new Zealot();
+            case "드라군":
+                return new Dragoon();
+            default:
+                throw new IllegalArgumentException("알 수 없는 프로토스 유닛 타입: " + unitType);
+        }
     }
 }

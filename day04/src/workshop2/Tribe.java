@@ -12,8 +12,8 @@ public abstract class Tribe {
         this.units = new ArrayList<>();
     }
 
-    public abstract Unit createBasicUnit();
-    
+    public abstract Unit createUnit(String unitType);
+
     public abstract List<String> getAvailableUnits();
 
     public void addUnit(Unit unit) {
@@ -33,7 +33,6 @@ public abstract class Tribe {
         return name;
     }
 }
-
 
 
 
