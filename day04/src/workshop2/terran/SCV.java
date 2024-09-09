@@ -4,7 +4,7 @@ import workshop2.GroundUnit;
 
 public class SCV extends GroundUnit {
     public SCV() {
-        super("SCV", 60, 5, 0,2); // 이름, HP, 공격력, 방어력
+        super("SCV", 60, 5, 0,2); // 이름, HP, 공격력, 방어력, 지상 스피드
     }
 
     public void gatherResources() {
