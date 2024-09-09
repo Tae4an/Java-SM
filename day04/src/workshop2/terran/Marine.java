@@ -1,7 +1,6 @@
 package workshop2.terran;
 
 import workshop2.GroundUnit;
-import workshop2.Unit;
 
 public class Marine extends GroundUnit {
     private boolean stimpackActive;
@@ -18,7 +17,7 @@ public class Marine extends GroundUnit {
             setHp(getHp() - 10);
             setDamage(getDamage() + 2);  // 공격력 증가
             setGroundSpeed(getGroundSpeed() + 2);  // 이동 속도 증가
-            System.out.println(getName() + "이(가) 스팀팩을 사용했습니다! 공격력과 이동 속도가 증가했지만, HP가 10 감소했습니다.");
+            System.out.println(getName() + "이(가) 스팀팩을 사용했습니다! 공격력과 이동 속도가 증가, HP가 10 감소.");
         } else if (stimpackActive) {
             System.out.println(getName() + "은(는) 이미 스팀팩을 사용 중입니다!");
         } else {
@@ -27,22 +26,8 @@ public class Marine extends GroundUnit {
     }
 
     @Override
-    public void attack(Unit target) {
-        super.attack(target);
-        if (stimpackActive) {
-            System.out.println(getName() + "이(가) 스팀팩 효과로 한 번 더 공격합니다!");
-            super.attack(target);
-        }
-    }
-
-    @Override
     public String toString() {
-        String baseInfo = super.toString();
-        return baseInfo.substring(0, baseInfo.length() - 1) +  // 마지막 '┘' 제거
-                String.format("\n│ 스팀팩: %-25s \n" +
-                                "│ 이동 속도: %-22d \n" +
-                                "└─────────────────────────────────┘",
-                        stimpackActive ? "활성화" : "비활성화",
-                        getGroundSpeed());
+        return super.toString() + " \n| 스팀팩: " + (stimpackActive ? "활성화\n" : "비활성화\n") +
+                "└─────────────────────────────────┘\n";
     }
 }

@@ -27,25 +27,14 @@ public abstract class Unit {
         System.out.println(name + "이(가) " + damage + "의 데미지를 입었습니다. 남은 HP: " + hp);
     }
 
-    public void heal(int amount) {
-        this.hp = Math.min(maxHp, this.hp + amount);
-        System.out.println(name + "이(가) " + amount + "만큼 치유되었습니다. 현재 HP: " + hp);
-    }
-
-    public boolean isAlive() {
-        return hp > 0;
-    }
-
-    // Getter 메서드들
     public String getName() { return name; }
     public int getHp() { return hp; }
     public int getMaxHp() { return maxHp; }
     public int getDamage() { return damage; }
     public int getArmor() { return armor; }
 
-    // Setter 메서드들 (필요한 경우에만 사용)
-    protected void setHp(int hp) { this.hp = Math.max(0, Math.min(maxHp, hp)); }
-    protected void setDamage(int damage) { this.damage = damage; }
+    public void setHp(int hp) { this.hp = Math.max(0, Math.min(maxHp, hp)); }
+    public void setDamage(int damage) { this.damage = damage; }
 
     @Override
     public String toString() {
@@ -58,6 +47,6 @@ public abstract class Unit {
                 name, hp, maxHp, damage, armor);
     }
 
-    // 추상 메서드: 각 유닛의 특수 능력
+    // 각 유닛의 특수 능력
     public abstract void specialAbility();
 }
