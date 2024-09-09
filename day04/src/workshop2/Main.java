@@ -5,19 +5,17 @@ import workshop2.terran.*;
 
 public class Main {
     public static void main(String[] args) {
-        // 테란 종족 생성
-        Terran terran = new Terran();
-
         // 플레이어 생성
-        Player player = new Player("TestPlayer", terran);
+        Player player = new Player("태산", new Terran());
         System.out.println(player);
         System.out.println();
 
         // 유닛 생성
         System.out.println("유닛 생성------------------------");
-        player.createUnit(1); // SCV 생성
-        player.createUnit(2); // 마린 생성
-        player.createUnit(3); // 메딕 생성
+        player.createUnit("SCV"); // SCV 생성
+        player.createUnit("마린"); // 마린 생성
+        player.createUnit("메딕"); // 메딕 생성
+        player.createUnit("레이스"); // 레이스 생성
         player.showUnits();
         System.out.println();
 
@@ -61,7 +59,6 @@ public class Main {
         System.out.println(medic);
         System.out.println(wraith);
 
-        // 플레이어의 모든 유닛 표시
         player.showUnits();
     }
 

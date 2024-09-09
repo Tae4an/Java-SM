@@ -36,6 +36,9 @@ public abstract class Unit {
     public void setHp(int hp) { this.hp = Math.max(0, Math.min(maxHp, hp)); }
     public void setDamage(int damage) { this.damage = damage; }
 
+    // 각 유닛의 특수 능력
+    public abstract void specialAbility();
+
     @Override
     public String toString() {
         return String.format("┌─────────────────────────────────┐\n" +
@@ -46,7 +49,4 @@ public abstract class Unit {
                         "└─────────────────────────────────┘",
                 name, hp, maxHp, damage, armor);
     }
-
-    // 각 유닛의 특수 능력
-    public abstract void specialAbility();
 }

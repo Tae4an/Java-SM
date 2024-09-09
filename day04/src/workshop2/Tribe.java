@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Tribe {
-    protected String name;
-    protected List<Unit> units;
+    private String name;
+    private List<Unit> units;
 
     public Tribe(String name) {
         this.name = name;

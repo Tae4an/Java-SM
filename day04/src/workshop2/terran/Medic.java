@@ -4,7 +4,7 @@ import workshop2.GroundUnit;
 import workshop2.Unit;
 
 public class Medic extends GroundUnit {
-    private final int healAmount;
+    private int healAmount;
 
     public Medic() {
         super("메딕", 60, 0, 1, 4); // 이름, HP, 공격력(0), 방어력, 지상 이동 속도
@@ -23,11 +23,7 @@ public class Medic extends GroundUnit {
 
     @Override
     public void specialAbility() {
-        System.out.println("메딕이 주변 유닛들을 치유할 준비를 합니다.");
+        System.out.println("메딕이 유닛들을 치유할 수 있습니다.");
     }
 
-    @Override
-    public void attack(Unit target) {
-        System.out.println("메딕은 공격할 수 없습니다.");
-    }
 }
