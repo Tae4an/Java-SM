@@ -24,7 +24,6 @@ public class Player {
             Unit newUnit = tribe.createUnit(unitType);
             // 생성된 유닛을 플레이어의 유닛 목록에 추가
             tribe.addUnit(newUnit);
-            // 유닛 생성 성공 메시지 출력
             System.out.println(name + "님이 " + newUnit.getName() + "을(를) 생성했습니다.");
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
