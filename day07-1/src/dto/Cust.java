@@ -1,12 +1,17 @@
 package dto;
 
+import java.time.LocalDateTime;
+
 public class Cust {
     private String id;
     private String pw;
     private String name;
+    private LocalDateTime signUpTime;
     public Cust() {
+        this.signUpTime = LocalDateTime.now();
     }
     public Cust(String id, String pw, String name) {
+        this();
         this.id = id;
         this.pw = pw;
         this.name = name;
