@@ -14,7 +14,8 @@ public class Main {
 
         try {
             account.withdraw(2000);
-        } catch (ZeroException e) {
+        }
+        catch (ZeroException e) {
             throw new RuntimeException(e);
         } catch (InException e) {
             throw new RuntimeException(e);
