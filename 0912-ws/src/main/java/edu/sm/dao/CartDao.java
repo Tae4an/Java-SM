@@ -1,6 +1,7 @@
 package edu.sm.dao;
 
 import edu.sm.dto.Cart;
+import edu.sm.exception.NotFoundException;
 import edu.sm.frame.Dao;
 import edu.sm.frame.Sql;
 
@@ -108,7 +109,7 @@ public class CartDao implements Dao<Integer, Cart> {
                 list.add(item);
             }
         } catch (Exception e) {
-            throw new Exception("장바구니 아이템 전체 조회 중 오류 발생: " + e.getMessage(), e);
+            throw new NotFoundException("장바구니 아이템 전체 조회 중 오류 발생: " + e.getMessage() + e);
         } finally {
             if (rs != null) rs.close();
             if (ps != null) ps.close();
