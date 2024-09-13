@@ -14,6 +14,7 @@ import java.util.Date;
 public class Order {
     private int id;
     private String custId;
+    private int productId;
     private Date orderDate;
     private int totalPrice;
 }

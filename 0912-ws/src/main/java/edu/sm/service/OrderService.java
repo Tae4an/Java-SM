@@ -96,4 +96,17 @@ public class OrderService implements MService<Integer, Order> {
         }
         return result;
     }
+
+    public List<Order> getByCustomerId(String custId) throws Exception {
+        Connection con = cp.getConnection();
+        List<Order> result = null;
+        try {
+            result = ((OrderDao)dao).selectByCustId(custId, con);
+        } catch(Exception e) {
+            throw e;
+        } finally {
+            cp.releaseConnection(con);
+        }
+        return result;
+    }
 }

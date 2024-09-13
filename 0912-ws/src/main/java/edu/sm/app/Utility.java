@@ -33,6 +33,7 @@ public class Utility {
             }
         }
     }
+
     public static void showLoggedInMenu() {
         while(true){
             System.out.println("\n===== 사용자 메뉴 =====");
@@ -41,7 +42,8 @@ public class Utility {
             System.out.println("3. 장바구니 담기");
             System.out.println("4. 장바구니 조회");
             System.out.println("5. 상품 주문하기");
-            System.out.println("6. 로그아웃");
+            System.out.println("6. 주문 내역 조회");
+            System.out.println("7. 로그아웃");
             System.out.println("=======================");
             System.out.print("선택해주세요: ");
 
@@ -52,7 +54,8 @@ public class Utility {
                 case 3 -> addToCart();
                 case 4 -> viewCart();
                 case 5 -> orderProduct();
-                case 6 -> {
+                case 6 -> viewOrderHistory();
+                case 7 -> {
                     loggedInUserId = null;
                     System.out.println("로그아웃 되었습니다. 메인 메뉴로 돌아갑니다.");
                     return;
@@ -255,25 +258,62 @@ public class Utility {
     public static void orderProduct() {
         System.out.println("\n=== 상품 주문하기 ===");
         System.out.print("주문할 상품 ID: ");
-        int productId = scanner.nextInt();
+        int productId = getIntInput();
         System.out.print("수량: ");
-        int quantity = scanner.nextInt();
-        scanner.nextLine();
+        int quantity = getIntInput();
 
         try {
             Product product = productService.get(productId);
+            if (product == null) {
+                throw new NotFoundException("해당 ID의 상품이 존재하지 않습니다: " + productId);
+            }
+
             int totalAmount = product.getPrice() * quantity;
 
             Order newOrder = Order.builder()
                     .custId(loggedInUserId)
-                    .orderDate(new Date())
+                    .productId(productId)
                     .totalPrice(totalAmount)
+                    .orderDate(new Date())
                     .build();
 
             orderService.add(newOrder);
-            System.out.println("주문이 완료되었습니다. 총 금액: " + totalAmount);
+            System.out.println("주문이 완료되었습니다.");
+            System.out.println("주문 내역:");
+            System.out.println("상품명: " + product.getName());
+            System.out.println("수량: " + quantity);
+            System.out.println("단가: " + product.getPrice());
+            System.out.println("총 금액: " + totalAmount);
+        } catch (NotFoundException e) {
+            System.out.println(e.getMessage());
         } catch (Exception e) {
             System.out.println("주문 중 오류가 발생했습니다: " + e.getMessage());
+        }
+    }
+
+    public static void viewOrderHistory() {
+        System.out.println("\n=== 주문 내역 조회 ===");
+        try {
+            List<Order> orders = orderService.getByCustomerId(loggedInUserId);
+            if (orders.isEmpty()) {
+                System.out.println("주문 내역이 없습니다.");
+                return;
+            }
+
+            System.out.println("---------------------------------------------------------------------------------------------");
+            System.out.printf("| %-5s | %-20s | %-20s |\n", "주문ID", "총액", "주문일");
+            System.out.println("---------------------------------------------------------------------------------------------");
+
+            for (Order order : orders) {
+                System.out.printf("| %-5d | %-20s | %-20s |\n",
+                        order.getId(),
+                        order.getTotalPrice(),
+                        order.getOrderDate().toString());
+            }
+            System.out.println("---------------------------------------------------------------------------------------------");
+        } catch (Exception e) {
+            System.out.println("주문 내역 조회 중 오류가 발생했습니다: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 }

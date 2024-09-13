@@ -17,8 +17,9 @@ public class OrderDao implements Dao<Integer, Order> {
         try {
             ps = conn.prepareStatement(Sql.insertOrder, PreparedStatement.RETURN_GENERATED_KEYS);
             ps.setString(1, order.getCustId());
-            ps.setDate(2, new java.sql.Date(order.getOrderDate().getTime()));
-            ps.setDouble(3, order.getTotalPrice());
+            ps.setInt(2,order.getProductId());
+            ps.setDate(3, new java.sql.Date(order.getOrderDate().getTime()));
+            ps.setDouble(4, order.getTotalPrice());
             ps.executeUpdate();
             
             ResultSet rs = ps.getGeneratedKeys();
@@ -109,6 +110,33 @@ public class OrderDao implements Dao<Integer, Order> {
             }
         } catch (Exception e) {
             throw new Exception("주문 전체 조회 중 오류 발생: " + e.getMessage(), e);
+        } finally {
+            if (rs != null) rs.close();
+            if (ps != null) ps.close();
+        }
+        return list;
+    }
+
+    public List<Order> selectByCustId(String custId, Connection conn) throws Exception {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        List<Order> list = new ArrayList<>();
+        try {
+            ps = conn.prepareStatement(Sql.selectOrdersByCustId);
+            ps.setString(1, custId);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                Order order = Order.builder()
+                        .id(rs.getInt("id"))
+                        .custId(rs.getString("cust_id"))
+                        .productId(rs.getInt("product_id"))
+                        .totalPrice(rs.getInt("total_price"))
+                        .orderDate(rs.getTimestamp("order_date"))
+                        .build();
+                list.add(order);
+            }
+        } catch (Exception e) {
+            throw new Exception("고객 ID로 주문 조회 중 오류 발생: " + e.getMessage(), e);
         } finally {
             if (rs != null) rs.close();
             if (ps != null) ps.close();
