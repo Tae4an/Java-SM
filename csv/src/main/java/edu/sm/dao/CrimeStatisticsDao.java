@@ -220,4 +220,38 @@ public class CrimeStatisticsDao implements Dao<Integer, CrimeStatistics> {
                 rs.getInt("saturday")
         );
     }
+
+    public void insertBatch(List<CrimeStatistics> statsList, Connection conn) throws Exception {
+        PreparedStatement ps = conn.prepareStatement(Sql.insert);
+        try  {
+            for (CrimeStatistics stats : statsList) {
+                ps.setString(1, stats.getMajorCategory());
+                ps.setString(2, stats.getMinorCategory());
+                ps.setInt(3, stats.getTime00To03());
+                ps.setInt(4, stats.getTime03To06());
+                ps.setInt(5, stats.getTime06To09());
+                ps.setInt(6, stats.getTime09To12());
+                ps.setInt(7, stats.getTime12To15());
+                ps.setInt(8, stats.getTime15To18());
+                ps.setInt(9, stats.getTime18To21());
+                ps.setInt(10, stats.getTime21To24());
+                ps.setInt(11, stats.getTimeUnknown());
+                ps.setInt(12, stats.getSunday());
+                ps.setInt(13, stats.getMonday());
+                ps.setInt(14, stats.getTuesday());
+                ps.setInt(15, stats.getWednesday());
+                ps.setInt(16, stats.getThursday());
+                ps.setInt(17, stats.getFriday());
+                ps.setInt(18, stats.getSaturday());
+                ps.addBatch();
+            }
+            ps.executeBatch();
+        } catch (Exception e) {
+            throw new Exception("범죄 통계 등록 중 오류 발생: " + e.getMessage(), e);
+        } finally {
+            if(ps != null) {
+                ps.close();
+            }
+        }
+    }
 }

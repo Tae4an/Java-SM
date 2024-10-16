@@ -96,4 +96,19 @@ public class CrimeStatisticsService implements MService<Integer, CrimeStatistics
         }
         return result;
     }
+
+    public void addBatch(List<CrimeStatistics> batch) throws Exception {
+        Connection con = cp.getConnection();
+        try {
+            con.setAutoCommit(false);
+            dao.insertBatch(batch, con);
+            con.commit();
+            System.out.println("Batch processed successfully. Size: " + batch.size());
+        } catch (Exception e) {
+            con.rollback();
+            throw e;
+        } finally {
+            cp.releaseConnection(con);
+        }
+    }
 }

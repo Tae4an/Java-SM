@@ -5,64 +5,52 @@ import edu.sm.service.CrimeStatisticsService;
 
 import java.io.*;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Main {
+    private static final int BATCH_SIZE = 1000; // 한 번에 처리할 데이터 수
+
     public static void main(String[] args) {
         String csvFile = "C:/경찰청_범죄 발생 시간대 및 요일_20191231.csv";
         CrimeStatisticsService service = new CrimeStatisticsService();
+        List<CrimeStatistics> batch = new ArrayList<>();
 
-//        try (BufferedReader br = new BufferedReader(
-//                new InputStreamReader(new FileInputStream(csvFile), Charset.forName("MS949")))) {
-//            String line;
-//            boolean isFirstLine = true;
-//
-//            while ((line = br.readLine()) != null) {
-//                // CSV 파일의 첫 번째 줄(헤더)은 건너뜀(실제 데이터가 아님)
-//                if (isFirstLine) {
-//                    isFirstLine = false;
-//                    continue;
-//                }
-//
-//                // 쉼표로 구분된 값들을 배열로 분리
-//                String[] values = line.split(",");
-//
-//                // CrimeStatistics 객체를 생성하고 값을 설정
-//                CrimeStatistics stats = createCrimeStatistics(values);
-//
-//                try {
-//                    // 생성된 CrimeStatistics 객체를 데이터베이스에 추가
-//                    service.add(stats);
-//                    System.out.println("Success");
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-
-        // csv 파일을 읽어서 출력
         try (BufferedReader br = new BufferedReader(
                 new InputStreamReader(new FileInputStream(csvFile), Charset.forName("MS949")))) {
             String line;
-
-            // 원본 데이터 출력
-//            while ((line = br.readLine()) != null) {
-//                System.out.println(line);
-//            }
+            boolean isFirstLine = true;
 
             while ((line = br.readLine()) != null) {
-                String[] values = line.split(",");
-                for (String value : values) {
-                    System.out.print(value + " ");
+                if (isFirstLine) {
+                    isFirstLine = false;
+                    continue;
                 }
-                System.out.println();
+
+                String[] values = line.split(",");
+                CrimeStatistics stats = createCrimeStatistics(values);
+                batch.add(stats);
+
+                if (batch.size() >= BATCH_SIZE) {
+                    processBatch(service, batch);
+                    batch.clear();
+                }
+            }
+            // 남은 데이터 처리
+            if (!batch.isEmpty()) {
+                processBatch(service, batch);
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
 
-
+    private static void processBatch(CrimeStatisticsService service, List<CrimeStatistics> batch) {
+        try {
+            service.addBatch(batch);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     // CSV 파일의 한 줄을 CrimeStatistics 객체로 변환하는 메소드

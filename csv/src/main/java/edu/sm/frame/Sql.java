@@ -7,6 +7,7 @@ public class Sql{
             " time_unknown, sunday, monday, tuesday, wednesday, thursday, friday, saturday)\n" +
             "VALUES \n" +
             "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+
     public static String select = "SELECT * FROM crime_statistics";
     public static String delete = "DELETE FROM crime_statistics WHERE id = ?";
     public static String update = "UPDATE crime_statistics \n" +
